@@ -324,6 +324,16 @@ augroup AutoLoadSettion
 augroup END
 " }}}
 
+" Tmux
+" tmux will send xterm-style keys when its xterm-keys option is on
+" the following is basically for shift-arrow keys.
+if &term =~ '^screen'
+    execute "set <xUp>=\e[1;*A"
+    execute "set <xDown>=\e[1;*B"
+    execute "set <xRight>=\e[1;*C"
+    execute "set <xLeft>=\e[1;*D"
+endif
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Vundle for bundles management
