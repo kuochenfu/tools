@@ -1,3 +1,8 @@
 change the file to be .xxxxx and copy to user folder.
 ex. change vimrc to .vimrc.
 
+vim
+- YouCompleteMe https://github.com/Valloric/YouCompleteMe
+- AG https://github.com/rking/ag.vim
+- ctags: # apt-get install exuberant-ctags 
+
