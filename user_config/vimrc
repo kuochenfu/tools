@@ -1,205 +1,328 @@
-"ser vim
-set ai "auto alignment
-syntax on "color text
+"gvim setting
+"colorscheme desert
+"colorscheme ir_black
+"set guifont=mingliu:h12
 
-"" set the tab way.
-set smartindent
-set tabstop=4 "tab is 4 spaces
-set shiftwidth=4
-set expandtab
+" 字典自動翻譯
+set keywordprg=~/bin/ydict
+set complete-=k complete+=k
 
-"" set other
-set nobackup "no vi backup
-set cursorline "display the line for cursor
-" Better command-line completion
-set wildmenu
-" Show partial commands in the last line of the screen
-set showcmd
-set hlsearch
-set showmode
-highlight Comment ctermfg=cyan
-highlight Search term=reverse ctermbg=4 ctermfg=7
+" 設定 vim 編輯預設備份目錄, 必須先 mkdir ~/vi_backup/
+set backup
+set backupdir=~/vi_backup/
+silent execute '!mkdir -p $HOME/vi_backup'
 
-" Use case insensitive search, except when using capital letters
-"set ignorecase
-"set smartcase
+" set php pear path
+set path+=/usr/share/php
 
-" Allow backspacing over autoindent, line breaks and start of insert action
-set backspace=indent,eol,start
+" set <leader>
+let mapleader=","
+" map <Leader>h :echo "Hello world."<CR>
 
-" When opening a new line and no filetype-specific indenting is enabled,
-" keep
-" the same indent as the line you're currently on. Useful for READMEs, etc.
-"set autoindent
+"security
+set nomodeline
 
-" Stop certain movements from always going to the first character of a line.
-" While this behaviour deviates from that of Vi, it does what most users
-" coming from other editors would expect.
-"set nostartofline
+" 游標移動後, 一樣可以用 backspace, del 等刪除動作
+set bs=2
 
-" Display the cursor position on the last line of the screen or in the
-" status
-" line of a window
-set ruler
+"移除 UTF-8 BOM
+set nobomb
+" 保留 BOM
+"set bomb
 
-" Always display the status line, even if only one window is displayed
-set laststatus=2
-
-" Instead of failing a command because of unsaved changes, instead raise a
-" dialogue asking if you wish to save changed files.
-"set confirm
-
-" Use visual bell instead of beeping when doing something wrong
-set visualbell
-
-" And reset the terminal code for the visual bell. If visualbell is set, and
-" this line is also included, vim will neither flash nor beep. If visualbell
-" is unset, this does nothing.
-set t_vb=
-
-" Enable use of the mouse for all modes
 "set mouse=a
 
-" Set the command window height to 2 lines, to avoid many cases of having to
-" "press <Enter> to continue"
-set cmdheight=2
+" 過長不要斷行
+"set nowrap
 
-" Display line numbers on the left
+" 設定營幕能顯示多少就多少, 不要過長顯示 @
+set display=lastline
+
+" 設定最大寬度, 當一行過長時, 會自動換行 (0 是停用此功能)
+set textwidth=0
+
+" 搜尋到的字加 hilight
+set hlsearch
+set incsearch
+
+" 忽略大小寫, 都可以搜尋到
+"set ignorecase
+
+" terminal title 會設為 filename
+set title
+
+set runtimepath=~/.vim,$VIMRUNTIME
+set history=50
+
+filetype on
 set number
+set cindent
+"set autoindent
+"set smartindent
 
-" Quickly time out on keycodes, but never time out on mappings
-"set notimeout ttimeout ttimeoutlen=200
+" \t 會以 4個空格代替
+set expandtab
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
 
-" Use <F11> to toggle between 'paste' and 'nopaste'
-"set pastetoggle=<F11>
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" cscope setting
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-if has("cscope")
-    set cscopetag
-    set csprg=/usr/bin/cscope
-    set csto=1
-    set cst
-    set nocsverb
-    " add any database in current directory
-    if filereadable("cscope.out")
-        cs add cscope.out
+" :sp 開檔時, 上面會列出所有檔案
+set wildmenu
+
+" 可以用 {{{ }}} 縮排 Folded
+" zi      "啟用/關閉折疊
+" zo      "打開折疊
+" zc      "關閉折疊
+" zO      "打開所有折疊
+" zC      "關閉所有折疊
+" zx      "更新折壘，即除了游標所在折疊不關，其他都關掉
+set foldmethod=marker
+
+" vim 支援 256色
+set t_Co=256
+
+" html indent 支援在 *.php
+filetype indent on
+filetype plugin indent on " Enable filetype-specific indenting and plugins
+
+" retab
+set list
+set listchars=tab:->,trail:.
+
+" {{{ syntax highlight
+syntax on
+":highlight 可以看到所有的顏色
+" 顏色 Templates
+" /usr/share/vim/vim70/colors/desert.vim
+"colorscheme default
+"colorscheme desert
+colorscheme darkblue
+"hi Comment ctermbg=black ctermfg=darkcyan
+"hi Comment term=standout cterm=bold ctermfg=0
+hi Comment ctermfg=cyan
+hi Search term=reverse ctermbg=4 ctermfg=7
+"hi Search term=reverse ctermbg=3 ctermfg=0
+hi Folded ctermbg=black ctermfg=darkcyan
+hi Cursor ctermbg=Gray ctermfg=Blue
+"hi Visual ctermbg=yellow ctermfg=blue
+hi clear SpellBad
+hi SpellBad term=underline cterm=underline ctermfg=red
+"highlight Normal ctermbg=black ctermfg=white
+"set background=light
+" }}}
+" {{{ 下面出現一列 bar.
+set laststatus=2
+set statusline=%4*%<\ %1*[%F]
+set statusline+=%4*\ %5*[%{&encoding}, " encoding
+"set statusline+=%{&fileformat}]%m " file format
+set statusline+=%{&fileformat}%{\"\".((exists(\"+bomb\")\ &&\ &bomb)?\",BOM\":\"\").\"\"}]%m " file format & bomb detect
+set statusline+=%4*%=\ %6*%y%4*\ %3*%l%4*,\ %3*%c%4*\ \<\ %2*%P%4*\ \>
+highlight User1 ctermfg=red
+highlight User2 term=underline cterm=underline ctermfg=green
+highlight User3 term=underline cterm=underline ctermfg=yellow
+highlight User4 term=underline cterm=underline ctermfg=white
+highlight User5 ctermfg=cyan
+highlight User6 ctermfg=white
+
+"set ls=2
+"set statusline=%<%f\ %m%=\ %h%r\ %-19([%p%%]\ %3l,%02c%03V%)%y
+"highlight StatusLine term=bold,reverse cterm=bold,reverse
+""highlight StatusLine ctermfg=2 ctermbg=0
+""highlight StatusLine ctermfg=blue ctermbg=white
+" }}}
+" {{{ 像 ultraedit 一樣有一列的顏色
+" Line highlight
+set cursorline
+" Column highlight
+" set cursorcolumn
+"highlight CursorLine cterm=none ctermbg=blue
+highlight CursorLine cterm=bold ctermbg=4
+" insert 的時後, 將 CursorLine 移除
+au InsertEnter * set nocul
+au InsertLeave * set cul
+" }}}
+" {{{ UTF-8 Big5 Setting
+" 檔案存檔會存成utf-8編碼
+" "set fileencoding=utf-8
+" "
+" " 以下四個設下去. vim 編出來都是 utf-8 編碼的.
+"set fileencoding=utf-8
+"set fileencodings=big5,utf-8
+"set termencoding=utf-8
+"設定自動轉換為 UTF-8 編碼
+" vim 新開的檔案預設是 utf-8 編碼(寫檔)
+set fileencoding=utf-8
+" vim 新開的檔案預設是 utf-8 編碼(讀檔)
+set fileencodings=utf-8,big5,euc-jp,gbk,euc-kr,utf-bom,iso8859-1
+" 內部在用的encode(vim 內部在用的 encode)
+set encoding=utf8
+set tenc=utf8
+" 使用 <F12> 來將文字編碼轉換成 Big5
+map <F12> :set tenc=big5<cr>
+
+" vim 啟動後，是使用 utf-8 編碼
+" 所有可能的編碼
+" set termencoding=big5
+" 當 Terminal.app 的 Display > encoding 是設成 Big5-hkscs，也就是說 terminal
+" 會把鍵盤的輸入以 big5 編碼方式送到 vim 時，vim 需要有這個設定，才會將 big5 的輸入
+" 轉成上面設定的 utf-8 編碼。如果你的 Terminal.app 是用 utf-8
+" 編碼，則可忽略此項。
+" }}}
+" {{{ For PHP Hot Key
+" Map ; to run PHP parser check
+"noremap ; :!php -l %<CR>
+" Map <CTRL>-P to run actual file with PHP CLI
+"noremap <C-P> :w!<CR>:!php %<CR>
+" Map <CTRL>-M to search phpm for the function name currently under the cursor (insert mode only)
+"inoremap <C-H> <ESC>:!phpm <C-R>=expand("<cword>")<CR><CR>
+" Automatic close char mapping
+"inoremap  { {<CR>}<C-O>O
+"inoremap [ []<LEFT>
+"inoremap ( ()<LEFT>
+"inoremap " ""<LEFT>
+"inoremap ' ''<LEFT>
+" }}}
+" {{{ 直接按 F8 (Tlist, function list)
+"source $HOME/.vim/phpdoc.vim
+"ctags apt-get install exuberant-ctags
+" }}}
+" {{{ ctrl + n, ctrl + p(會自動把function列出) - php
+set dictionary+=~/.vim/funclist.txt
+" }}}
+" {{{ vim 開 tab => imap <C-n> <Esc>:w<CR><Esc>
+" NERDTree 關閉按 q 即可
+nnoremap <silent> <F5> :NERDTree<CR>
+nnoremap <silent> <F8> :Tlist<CR>
+nnoremap <silent> <F9> :set paste<CR>
+"nnoremap <silent> <F6> :tabn<CR>
+"nnoremap <C-n> <Esc>:tabnew<CR><Esc>:e
+map <F2> :set spell!<CR><Bar>:echo "Spell check: " . strpart("OffOn", 3 * &spell, 3)<CR>
+"map <F3> :set cursorline!<CR><Bar>:echo "Highlight active cursor line: " . strpart("OffOn", 3 * &cursorline, 3)<CR>
+map <C-t>l <ESC>:tabnext<CR>
+map <C-t>h <ESC>:tabprev<CR>
+map <C-t>n <ESC>:tabnew<CR>:NERDTree<CR>
+map <C-t>c <ESC>:tabclose<CR>
+map <C-t>0 <ESC>:tabfirst<CR>
+map <C-t>$ <ESC>:tablast<CR>
+map <C-t>q <ESC>:qall<CR>
+":nmap <C-t> :tabnew<cr>
+"map <C-t>n <ESC>:tabnew<CR><ESC>:e
+":nmap <C-tab> :tabnext<cr>
+"map <C-w> <ESC>:tabclose<CR>
+
+" vim -p filename1 filname2
+" :tabe filename
+" gt
+" Ctrl-x Ctrl-o
+" Ctrl+n 再打就有列表,
+" Ctrl+n Ctrl+p 就可以開始打, 然後自動搜尋到 function
+" :setlocal spell spelllang=en_gb
+" ]s - move to next spelling error
+" z= - spelling suggestion
+" }}}
+" {{{ 會自動到最後離開的位置
+if has("autocmd")
+    autocmd BufRead *.txt set tw=78
+    autocmd BufReadPost *
+    \ if line("'\"") > 0 && line ("'\"") <= line("$") |
+    \   exe "normal g'\"" |
+    \ endif
+endif
+" }}}
+" {{{ save .vimrc, auto exec, .vimrc 如果存檔, 就會立刻實現
+autocmd! bufwritepost .vimrc source %
+" }}}
+" {{{ 自動去除不必要的空白
+" Remove trailing whitespaces
+" map \ :%s/[     ]*$//g
+map \ :%s/\s*$//g
+
+" 存檔時自動移除結尾空白
+autocmd FileType c,cpp,java,php,perl,python,ruby,sh autocmd BufWritePre  :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
+
+" 縮排 加 移除空白
+map <f11> <esc>1G=G<cr><esc>:%s/\s*$//<cr><esc>:noh<cr>
+
+"http://blog.bs2.to/post/EdwardLee/17961
+" Remove trailing whitespace when writing a buffer, but not for diff files.
+" From: Vigil
+function! RemoveTrailingWhitespace()
+    if &ft != "diff"
+        let b:curcol = col(".")
+        let b:curline = line(".")
+        silent! %s/\s\+$//
+        silent! %s/\(\s*\n\)\+\%$//
+        call cursor(b:curline, b:curcol)
     endif
-    set csverb
-    nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
-    nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-    nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
-endif
-
-nmap <F5> :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' -o -iname '*.inc' > cscope.files<CR><CR>
-                         \ :!cscope -Rb -i cscope.files -f cscope.out<CR><CR>
-                         \ :cs reset<CR><CR>
-                         \ :!ctags -R<CR><CR>
-
-"====[ Make the 81st column stand out ]====================
-
-    " EITHER the entire 81st column, full-screen...
-    "highlight ColorColumn ctermbg=magenta
-    "set colorcolumn=81
-
-    " OR ELSE just the 81st column of wide lines...
-    highlight ColorColumn ctermbg=magenta
-    call matchadd('ColorColumn', '\%81v', 100)
-
-    " OR ELSE on April Fools day...
-    "highlight ColorColumn ctermbg=red ctermfg=blue
-    "exec 'set colorcolumn=' . join(range(2,80,3), ',')
-
-
-"=====[ Highlight matches when jumping to next ]=============
-
-    " This rewires n and N to do the highlighing...
-    nnoremap <silent> n   n:call HLNext(0.4)<cr>
-    nnoremap <silent> N   N:call HLNext(0.4)<cr>
-
-
-"====[ Make tabs, trailing whitespace, and non-breaking spaces visible ]======
-
-    exec "set listchars=tab:\uBB\uBB,trail:\uB7,nbsp:~"
-    set list
-
-"====[ Swap : and ; to make colon commands easier to type(effect ctags/cscope) ]======
-
-    "nnoremap  ;  :
-    "nnoremap  :  ;
-
-
-"====[ Swap v and CTRL-V, because Block mode is more useful that Visual mode "]======
-
-    "nnoremap    v   <C-V>
-    "nnoremap <C-V>     v
-
-    "vnoremap    v   <C-V>
-    "vnoremap <C-V>     v
-
-
-"====[ Always turn on syntax highlighting for diffs ]=========================
-
-    " EITHER select by the file-suffix directly...
-    augroup PatchDiffHighlight
-        autocmd!
-        autocmd BufEnter  *.patch,*.rej,*.diff   syntax enable
-    augroup END
-
-    " OR ELSE use the filetype mechanism to select automatically...
-    "filetype on
-    "augroup PatchDiffHighlight
-    "    autocmd!
-    "    autocmd FileType  diff   syntax enable
-    "augroup END
-
-
-"====[ Open any file with a pre-existing swapfile in readonly mode "]=========
-
-    augroup NoSimultaneousEdits
-        autocmd!
-        autocmd SwapExists * let v:swapchoice = 'o'
-        autocmd SwapExists * echomsg ErrorMsg
-        autocmd SwapExists * echo 'Duplicate edit session (readonly)'
-        autocmd SwapExists * echohl None
-        autocmd SwapExists * sleep 2
-    augroup END
-
-    " Also consider the autoswap_mac.vim plugin (but beware its limitations)
-
-
-if 0
-"====[ Mappings to activate spell-checking alternatives ]================
-
-    nmap  ;s     :set invspell spelllang=en<CR>
-    nmap  ;ss    :set    spell spelllang=en-basic<CR>
-
-    " To create the en-basic (or any other new) spelling list:
-    "
-    "     :mkspell  ~/.vim/spell/en-basic  basic_english_words.txt
-    "
-    " See :help mkspell
-
-
-"====[ Make CTRL-K list diagraphs before each digraph entry ]===============
-
-    inoremap <expr> <C-K> ShowDigraphs()
-
-    function! ShowDigraphs ()
-        digraphs
-        call getchar()
-        return "\<C-K>"
+endfunction
+autocmd BufWritePre * call RemoveTrailingWhitespace()
+" }}}
+" {{{ tab 直接往後退, 而且一直選取著.
+" <s-v> + <tab> 或 <s-v> + <s-tab>
+xmap   <tab> >gv
+xmap   <s-tab> <gv
+" }}}
+" {{{ python indent
+" 開啟 Python 檔案時自動用縮排來 Folding 最多三層
+" 縮排跟 Tab 都設定為 4 個空白
+" 在關鍵字上按下 K 會透過 ipython 去查詢使用說明
+" 或是直接輸入 :Man list 這樣的指令
+" 把上面那段 script 加到 .vimrc 裡面就可以使用了
+function! s:python_custom()
+    function! s:man(keyword)
+        echo system('ipython -quick -c "help ' . a:keyword . '"')
     endfunction
-
-    " But also consider the hudigraphs.vim and betterdigraphs.vim plugins,
-    " which offer smarter and less intrusive alternatives
+    setlocal tabstop=4 expandtab shiftwidth=4
+    setlocal foldnestmax=2 foldmethod=indent foldcolumn=3 foldlevel=2
+    command! -nargs=1 Man call s:man(<f-args>)
+    cnoremap K viwy:Man <C-R>"<CR>
+endfunction
+if has("autocmd")
+    autocmd Filetype python call s:python_custom()
 endif
+" }}}
+" {{{ Tab 顏色
+highlight TabLine ctermbg=white ctermfg=black
+highlight TabLineFill ctermbg=black
+highlight TabLineSel ctermbg=blue ctermfg=white
+
+"hi TabLineFill guifg=#90fff0 guibg=#2050d0 ctermfg=white ctermbg=lightblue
+"hi TabLine guifg=#90fff0 guibg=#2050d0 ctermfg=black ctermbg=white
+"hi TabLineSel guifg=#90fff0 guibg=#2050d0 ctermfg=white ctermbg=LightMagenta
+" }}}
+" {{{ 用於自動 load session (Tab)
+" Session:
+function! AutoLoadSession()
+    let g:sessionfile = getcwd() . "/Session.vim"
+    if (argc() == 0 && filereadable(g:sessionfile))
+        echohl WarningMsg
+        echo "Session file exists. Load this? (y/n): "
+        echohl None
+        while 1
+            let c = getchar()
+            if c == char2nr("y")
+                so Session.vim
+                return
+            elseif c == char2nr("n")
+                return
+            endif
+        endwhile
+    endif
+endfunction
+
+function! AutoSaveSession()
+    if exists(g:sessionfile)
+        exe "mks! " .
+        g:sessionfile
+    endif
+endfunction
+
+augroup AutoLoadSettion
+    au!
+    au VimEnter * call AutoLoadSession()
+    au VimLeave * call AutoSaveSession()
+augroup END
+" }}}
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -224,7 +347,7 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 " let Vundle manage Vundle
-" required! 
+" required!
 Bundle 'gmarik/vundle'
 
 " My Bundles here:
@@ -337,4 +460,3 @@ Bundle 'scrooloose/syntastic'
 
 
 Bundle 'rking/ag.vim'
-

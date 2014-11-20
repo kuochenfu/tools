@@ -1,0 +1,340 @@
+"ser vim
+set ai "auto alignment
+syntax on "color text
+
+"" set the tab way.
+set smartindent
+set tabstop=4 "tab is 4 spaces
+set shiftwidth=4
+set expandtab
+
+"" set other
+set nobackup "no vi backup
+set cursorline "display the line for cursor
+" Better command-line completion
+set wildmenu
+" Show partial commands in the last line of the screen
+set showcmd
+set hlsearch
+set showmode
+highlight Comment ctermfg=cyan
+highlight Search term=reverse ctermbg=4 ctermfg=7
+
+" Use case insensitive search, except when using capital letters
+"set ignorecase
+"set smartcase
+
+" Allow backspacing over autoindent, line breaks and start of insert action
+set backspace=indent,eol,start
+
+" When opening a new line and no filetype-specific indenting is enabled,
+" keep
+" the same indent as the line you're currently on. Useful for READMEs, etc.
+"set autoindent
+
+" Stop certain movements from always going to the first character of a line.
+" While this behaviour deviates from that of Vi, it does what most users
+" coming from other editors would expect.
+"set nostartofline
+
+" Display the cursor position on the last line of the screen or in the
+" status
+" line of a window
+set ruler
+
+" Always display the status line, even if only one window is displayed
+set laststatus=2
+
+" Instead of failing a command because of unsaved changes, instead raise a
+" dialogue asking if you wish to save changed files.
+"set confirm
+
+" Use visual bell instead of beeping when doing something wrong
+set visualbell
+
+" And reset the terminal code for the visual bell. If visualbell is set, and
+" this line is also included, vim will neither flash nor beep. If visualbell
+" is unset, this does nothing.
+set t_vb=
+
+" Enable use of the mouse for all modes
+"set mouse=a
+
+" Set the command window height to 2 lines, to avoid many cases of having to
+" "press <Enter> to continue"
+set cmdheight=2
+
+" Display line numbers on the left
+set number
+
+" Quickly time out on keycodes, but never time out on mappings
+"set notimeout ttimeout ttimeoutlen=200
+
+" Use <F11> to toggle between 'paste' and 'nopaste'
+"set pastetoggle=<F11>
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" cscope setting
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if has("cscope")
+    set cscopetag
+    set csprg=/usr/bin/cscope
+    set csto=1
+    set cst
+    set nocsverb
+    " add any database in current directory
+    if filereadable("cscope.out")
+        cs add cscope.out
+    endif
+    set csverb
+    nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+    nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+    nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+endif
+
+nmap <F5> :!find . -iname '*.c' -o -iname '*.cpp' -o -iname '*.h' -o -iname '*.hpp' -o -iname '*.inc' > cscope.files<CR><CR>
+                         \ :!cscope -Rb -i cscope.files -f cscope.out<CR><CR>
+                         \ :cs reset<CR><CR>
+                         \ :!ctags -R<CR><CR>
+
+"====[ Make the 81st column stand out ]====================
+
+    " EITHER the entire 81st column, full-screen...
+    "highlight ColorColumn ctermbg=magenta
+    "set colorcolumn=81
+
+    " OR ELSE just the 81st column of wide lines...
+    highlight ColorColumn ctermbg=magenta
+    call matchadd('ColorColumn', '\%81v', 100)
+
+    " OR ELSE on April Fools day...
+    "highlight ColorColumn ctermbg=red ctermfg=blue
+    "exec 'set colorcolumn=' . join(range(2,80,3), ',')
+
+
+"=====[ Highlight matches when jumping to next ]=============
+
+    " This rewires n and N to do the highlighing...
+    nnoremap <silent> n   n:call HLNext(0.4)<cr>
+    nnoremap <silent> N   N:call HLNext(0.4)<cr>
+
+
+"====[ Make tabs, trailing whitespace, and non-breaking spaces visible ]======
+
+    exec "set listchars=tab:\uBB\uBB,trail:\uB7,nbsp:~"
+    set list
+
+"====[ Swap : and ; to make colon commands easier to type(effect ctags/cscope) ]======
+
+    "nnoremap  ;  :
+    "nnoremap  :  ;
+
+
+"====[ Swap v and CTRL-V, because Block mode is more useful that Visual mode "]======
+
+    "nnoremap    v   <C-V>
+    "nnoremap <C-V>     v
+
+    "vnoremap    v   <C-V>
+    "vnoremap <C-V>     v
+
+
+"====[ Always turn on syntax highlighting for diffs ]=========================
+
+    " EITHER select by the file-suffix directly...
+    augroup PatchDiffHighlight
+        autocmd!
+        autocmd BufEnter  *.patch,*.rej,*.diff   syntax enable
+    augroup END
+
+    " OR ELSE use the filetype mechanism to select automatically...
+    "filetype on
+    "augroup PatchDiffHighlight
+    "    autocmd!
+    "    autocmd FileType  diff   syntax enable
+    "augroup END
+
+
+"====[ Open any file with a pre-existing swapfile in readonly mode "]=========
+
+    augroup NoSimultaneousEdits
+        autocmd!
+        autocmd SwapExists * let v:swapchoice = 'o'
+        autocmd SwapExists * echomsg ErrorMsg
+        autocmd SwapExists * echo 'Duplicate edit session (readonly)'
+        autocmd SwapExists * echohl None
+        autocmd SwapExists * sleep 2
+    augroup END
+
+    " Also consider the autoswap_mac.vim plugin (but beware its limitations)
+
+
+if 0
+"====[ Mappings to activate spell-checking alternatives ]================
+
+    nmap  ;s     :set invspell spelllang=en<CR>
+    nmap  ;ss    :set    spell spelllang=en-basic<CR>
+
+    " To create the en-basic (or any other new) spelling list:
+    "
+    "     :mkspell  ~/.vim/spell/en-basic  basic_english_words.txt
+    "
+    " See :help mkspell
+
+
+"====[ Make CTRL-K list diagraphs before each digraph entry ]===============
+
+    inoremap <expr> <C-K> ShowDigraphs()
+
+    function! ShowDigraphs ()
+        digraphs
+        call getchar()
+        return "\<C-K>"
+    endfunction
+
+    " But also consider the hudigraphs.vim and betterdigraphs.vim plugins,
+    " which offer smarter and less intrusive alternatives
+endif
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" Vundle for bundles management
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set nocompatible               " be iMproved
+filetype off                   " required!
+
+" http://www.erikzaadi.com/2012/03/19/auto-installing-vundle-from-your-vimrc/
+" Setting up Vundle - the vim plugin bundler
+let iCanHazVundle=1
+let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+if !filereadable(vundle_readme)
+    echo "Installing Vundle.."
+    echo ""
+    silent !mkdir -p ~/.vim/bundle
+    silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+    let iCanHazVundle=0
+endif
+
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" let Vundle manage Vundle
+" required! 
+Bundle 'gmarik/vundle'
+
+" My Bundles here:
+"
+" original repos on github
+Bundle 'tpope/vim-fugitive'
+Bundle 'Valloric/YouCompleteMe'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+Bundle 'tpope/vim-rails.git'
+" vim-scripts repos
+Bundle 'L9'
+Bundle 'FuzzyFinder'
+" non github repos
+Bundle 'git://git.wincent.com/command-t.git'
+" git repos on your local machine (ie. when working on your own plugin)
+"Bundle 'file:///Users/gmarik/path/to/plugin'
+
+" ...
+"Bundle 'bash-support.vim'
+"Bundle 'Cpp11-Syntax-Support'
+"Bundle 'perl-support.vim'
+
+"Bundle 'winmanager'
+" Taglist
+Bundle 'taglist.vim'
+let Tlist_Enable_Fold_Column = 0
+let Tlist_Compact_Format = 1
+let Tlist_File_Fold_Auto_Close = 0
+let Tlist_GainFocus_On_ToggleOpen = 1
+map <F8> :TlistToggle<cr>
+vmap <F8> <esc> :TlistToggle<cr>
+imap <F8> <esc> :TlistToggle<cr>
+"nnoremap <silent> <F8> :TlistToggle<CR><CR>
+
+"Bundle 'SuperTab'
+
+filetype plugin indent on     " required!
+"
+" Brief help
+" :BundleList          - list configured bundles
+" :BundleInstall(!)    - install(update) bundles
+" :BundleSearch(!) foo - search(or refresh cache first) for foo
+" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+"
+" see :h vundle for more details or wiki for FAQ
+" NOTE: comments after Bundle command are not allowed..
+
+" nerdtree
+Bundle 'scrooloose/nerdtree'
+let Tlist_Use_Right_Window = 1
+nnoremap <silent> <F2> :NERDTreeToggle<cr>
+imap <F2> <Esc> :NERDTreeToggle<cr>
+let NERDTreeIgnore=['\.o$', '\.ko$', '\.symvers$', '\.order$', '\.mod.c$', '\.swp$', '\.bak$', '\~$']
+let NERDTreeSortOrder=['\/$', 'Makefile', 'makefile', '\.c$', '\.cc$', '\.cpp$', '\.h$', '*', '\~$']
+let NERDTreeMinimalUI=1
+"let NERDTreeQuitOnOpen=1
+"let NERDTreeWinPos = 'right'
+"let NERDTreeWinSize = 31
+
+" NerdCommenter plugin
+Bundle 'scrooloose/nerdcommenter'
+
+" Syntastic plugin
+Bundle 'scrooloose/syntastic'
+
+" Tagbar plugin
+"Bundle 'majutsushi/tagbar'
+"nnoremap <silent><F9> :TagbarToggle<cr>
+"imap <F9> <Esc>:TagbarToggle<cr>
+"let g:tagbar_autofocus = 1
+"let g:tagbar_sort = 0
+"let g:tagbar_compact = 1
+"let g:tagbar_indent = 1
+"let g:tagbar_autoshowtag = 1
+
+" DelimitMate plugin
+"Bundle 'Raimondi/delimitMate'
+
+" CtrlP for file searching
+"Bundle 'kien/ctrlp.vim'
+"let g:ctrlp_map = '<c-f>'
+"let g:ctrlp_cmd = 'CtrlP'
+"let g:ctrlp_custom_ignore = {
+""\ 'dir': '\v[\/]\.(git|hg|svn)$',
+""\ 'file': '\v\.(o|ko|so|obj|dll|exe)$',
+""\ 'link': 'some_bad_symbolic_links',
+""\ }
+"let g:ctrlp_working_path_mode = 'ra'
+"let g:ctrlp_match_window_bottom=1
+
+" EasyGrep
+"Bundle 'vim-scripts/EasyGrep'
+"let g:EasyGrepMode = 2
+
+" miniBufExpl plugin
+"Bundle 'fholgado/minibufexpl.vim'
+"noremap <C-J> <C-W>j
+"noremap <C-K> <C-W>k
+"noremap <C-H> <C-W>h
+"noremap <C-Down> <C-W>j
+"noremap <C-Up> <C-W>k
+"noremap <C-Left> <C-W>h
+"noremap <C-Right> <C-W>l
+"noremap <C-L> <C-W>l
+"noremap <C-TAB> :MBEbn<CR>
+"noremap <C-S-TAB> :MBEbp<CR>
+"let g:miniBufExplBuffersNeeded = 0
+"let g:miniBufExplCycleArround = 1
+
+
+Bundle 'rking/ag.vim'
+
