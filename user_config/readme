@@ -1,8 +1,45 @@
 change the file to be .xxxxx and copy to user folder.
 ex. change vimrc to .vimrc.
 
-vim
+vim plugins
 - YouCompleteMe https://github.com/Valloric/YouCompleteMe
 - AG https://github.com/rking/ag.vim
-- ctags: # apt-get install exuberant-ctags 
+- ctags: # apt-get install exuberant-ctags
+        Ctrl+] " 根據游標所在位置的字串常做關鍵字，跳進去(快速鍵:tj).
+        Ctrl+t " 跳出來.
+        :tselect " 當有多個關鍵字在tags file中被找到時，可用tselect來選.
+        :tags " 查看現跳到那裡了快速鍵:ta).
+        :tnext " 跳到下一個被找到的tag(快速鍵:tn).
+        :tprev "跳到前一個被找到的tag(快速鍵:tp).
+- cscope:
+        Ctrl+\ s "s表Symbol，列出所有參考到游標所在字串的地方，包含定義和呼叫.
+        ctrl+\ g "g表Global，與ctags的Ctrl+]相同.
+        ctrl+\ c "c表Call，列出所有以游標所在字串當函數名的地方.
+        ctrl+\ t "t表Text，列出專案中所有出現游標所在字串的地方.
+        ctrl+\ f "f表File，以游標所在字串當檔名，開啟之.
+        ctrl+\ i "i表Include，以游標所在字串當檔名，列出所有include此檔的檔案.
+        ctrl+\ d "d表calleD，以游標所在字串當函式名，列出所有此函式呼叫的函式.
+- CtrlSF: https://github.com/dyng/ctrlsf.vim
+        This plugin is based on ACK or AG plugin
+        Key Maps
 
+        In CtrlSF window:
+
+        o, Enter - Jump to file that contains the line under cursor.
+        t - Like o but open file in a new tab.
+        p - Like o but open file in a preview window.
+        O - Like o but always leave CtrlSF window opening.
+        T - Lkie t but focus CtrlSF window instead of opened new tab.
+        q - Quit CtrlSF window.
+        <C-J> - Move cursor to next match.
+        <C-K> - Move cursor to previous match.
+        In preview window:
+
+        q - Close preview window.
+
+
+vim keys
+Tab Windows switch
+gt            go to next tab
+gT            go to previous tab
+{i}gt         go to tab in position i

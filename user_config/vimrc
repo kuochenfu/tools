@@ -460,3 +460,4 @@ Bundle 'scrooloose/syntastic'
 
 
 Bundle 'rking/ag.vim'
+Bundle 'dyng/ctrlsf.vim'
