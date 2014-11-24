@@ -343,7 +343,6 @@ if fname =~ '^\w\+:/'
 endif
 let fname = simplify(fname)
 
-<<<<<<< HEAD
 let resolvedfile = resolve(fname)
 if resolvedfile == fname
   return
@@ -358,16 +357,6 @@ command! FollowSymlink call MyFollowSymlink()
 command! ToggleFollowSymlink let w:no_resolve_symlink = !get(w:, 'no_resolve_symlink', 0) | echo "w:no_resolve_symlink =>" w:no_resolve_symlink
 au BufReadPost * call MyFollowSymlink(expand('<afile>'))
 "}}}
-endif
-
-" Tmux
-" tmux will send xterm-style keys when its xterm-keys option is on
-" the following is basically for shift-arrow keys.
-if &term =~ '^screen'
-    execute "set <xUp>=\e[1;*A"
-    execute "set <xDown>=\e[1;*B"
-    execute "set <xRight>=\e[1;*C"
-    execute "set <xLeft>=\e[1;*D"
 endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -477,15 +466,13 @@ Bundle 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-f>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_custom_ignore = {
-    \ 'dir': '\v[\/]\.(git|hg|svn)|build_dir|staging_dir$',
+    \ 'dir': '\v[\/]\.(git|hg|svn)$',
     \ 'file': '\v\.(o|ko|so|obj|dll|exe)$',
     \ 'link': 'some_bad_symbolic_links',
     \ }
-"let g:ctrlp_working_path_mode = 'ra'
-let g:ctrlp_working_path_mode = ''
+let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_match_window_bottom=1
 let g:ctrlp_lazy_update=1
-let g:ctrlp_follow_symlinks=1
 
 " EasyGrep
 "Bundle 'vim-scripts/EasyGrep'
