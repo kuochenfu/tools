@@ -115,10 +115,12 @@ PS1="\[\e[37m\][\[\e[31m\]\u\[\e[37m\]-franz \t\[\e[35m\]\w #\#\[\e[37m\]]\\$\[\
 export JAVA_HOME="/usr/lib/jvm/java-1.7.0-sun-amd64"
 export PATH="$PATH:$JAVA_HOME/bin"
 
-# for LT openwrt
+# for openwrt
 export DLDIR=${HOME}/dl
-PATH="$PATH":/opt/toolchain/arm-elf-3.4.4/bin
+export CCACHE_DIR=$HOME/dl/ccache
+PATH="$PATH":/opt/toolchain/arm-elf-4.5.2/bin:/usr/lib/ccache
 export PATH
+ccache --max-size=10G -s > /dev/null 2>&1
 
 # webrtc test
 #PATH="$PATH":`pwd`/chromium/depot_tools
