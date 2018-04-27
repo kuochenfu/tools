@@ -38,10 +38,10 @@ sudo make install
 
 # set vim as the default editor.
 echo "Set vim as default  editor"
-sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 1
-sudo update-alternatives --set editor /usr/bin/vim
-sudo update-alternatives --install /usr/bin/vi vi /usr/bin/vim 1
-sudo update-alternatives --set vi /usr/bin/vim
+sudo update-alternatives --install /usr/bin/editor editor /usr/local/bin/vim 1
+sudo update-alternatives --set editor /usr/local/bin/vim
+sudo update-alternatives --install /usr/bin/vi vi /usr/local/bin/vim 1
+sudo update-alternatives --set vi /usr/local/bin/vim
 
 # get the vundle and install it. (need git tool first)
 # after clone it, we can check the readme in the .vim/bundle/vundle to modify the .vimrc file.
